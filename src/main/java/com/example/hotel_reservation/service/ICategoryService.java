@@ -2,6 +2,7 @@ package com.example.hotel_reservation.service;
 
 import com.example.hotel_reservation.dto.category.CategoryRequestDto;
 import com.example.hotel_reservation.dto.category.CategoryResponseDto;
+import com.example.hotel_reservation.entity.Category;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +13,9 @@ public interface ICategoryService {
 
     List<CategoryResponseDto> getAllCategories();
 
-    Optional<CategoryResponseDto> findCategoryById(Long id);
+    Category findCategoryById(Long id);
 
     Optional<CategoryResponseDto> findCategoryByType(String categoryType);
 
-    boolean existsByCategoryType(String categoryType);
+    boolean existsByCategoryType(Category category);
 }

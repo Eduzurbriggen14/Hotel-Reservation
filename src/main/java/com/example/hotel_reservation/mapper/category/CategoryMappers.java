@@ -3,33 +3,57 @@ package com.example.hotel_reservation.mapper.category;
 import com.example.hotel_reservation.dto.category.CategoryRequestDto;
 import com.example.hotel_reservation.dto.category.CategoryResponseDto;
 import com.example.hotel_reservation.entity.Category;
+import com.example.hotel_reservation.entity.CategoryType;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMappers {
 
     public Category categoryResponseDtotoCategory(CategoryResponseDto categoryResponseDto){
-        return new Category(categoryResponseDto.categoryName(),
+        if (categoryResponseDto == null) return null;
+        CategoryType type = null;
+        if (categoryResponseDto.categoryType() != null) {
+            try{
+                type = CategoryType.valueOf(categoryResponseDto.categoryType().toUpperCase());
+            } catch (IllegalArgumentException e){
+                // dejar type null; quien llame debe validar
+            }
+        }
+        return new Category(categoryResponseDto.categoryId(),
+                categoryResponseDto.categoryName(),
                 categoryResponseDto.description(),
-                categoryResponseDto.categoryType(),
+                categoryResponseDto.pricePerNight(),
                 categoryResponseDto.maxOccupancy(),
-                categoryResponseDto.pricePerNight());
+                null,
+                type);
     }
 
     public CategoryResponseDto categoryToCategoryResponseDto(Category category){
+        if (category == null) return null;
         return new CategoryResponseDto(category.getCategoryId(),
                     category.getCategoryName(),
                     category.getDescription(),
-                    category.getCategoryType().name(),
+                    category.getCategoryType() != null ? category.getCategoryType().name() : null,
                     category.getMaxOccupancy(),
                     category.getPricePerNight());
     }
 
     public Category categoryRequestDtoToCategory(CategoryRequestDto categoryRequestDto){
-        return new Category(categoryRequestDto.categoryName(),
+        if (categoryRequestDto == null) return null;
+        CategoryType type = null;
+        if (categoryRequestDto.categoryType() != null){
+            try{
+                type = CategoryType.valueOf(categoryRequestDto.categoryType().toUpperCase());
+            } catch (IllegalArgumentException e){
+                throw new IllegalArgumentException("categoryType invalid: " + categoryRequestDto.categoryType());
+            }
+        }
+        return new Category(null,
+                categoryRequestDto.categoryName(),
                 categoryRequestDto.description(),
-                categoryRequestDto.categoryType(),
+                categoryRequestDto.pricePerNight(),
                 categoryRequestDto.maxOccupancy(),
-                categoryRequestDto.pricePerNight());
+                null,
+                type);
     }
 }
