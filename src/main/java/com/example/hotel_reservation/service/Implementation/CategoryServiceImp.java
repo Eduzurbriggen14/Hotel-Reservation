@@ -4,7 +4,9 @@ import com.example.hotel_reservation.dto.category.CategoryRequestDto;
 import com.example.hotel_reservation.dto.category.CategoryResponseDto;
 import com.example.hotel_reservation.entity.Category;
 import com.example.hotel_reservation.entity.CategoryType;
-import com.example.hotel_reservation.mapper.category.CategoryMappers;
+import com.example.hotel_reservation.exception.BadRequestException;
+import com.example.hotel_reservation.exception.ResourceNotFoundException;
+import com.example.hotel_reservation.mapper.CategoryMappers;
 import com.example.hotel_reservation.repository.ICategoryRepository;
 import com.example.hotel_reservation.service.ICategoryService;
 import org.springframework.stereotype.Service;
@@ -16,53 +18,75 @@ import java.util.Optional;
 public class CategoryServiceImp implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
-    private final CategoryMappers categoryMappers;
 
-    public CategoryServiceImp(ICategoryRepository categoryRepository, CategoryMappers categoryMappers) {
+    public CategoryServiceImp(ICategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.categoryMappers = categoryMappers;
     }
 
     @Override
     public CategoryResponseDto createCategory(CategoryRequestDto categoryRequestDto) {
-        Category category = categoryMappers.categoryRequestDtoToCategory(categoryRequestDto);
-        Category categorySaved = categoryRepository.save(category);
+        if (categoryRequestDto == null) {
+            throw new BadRequestException("Category data cannot be null");
+        }
 
-        return categoryMappers.categoryToCategoryResponseDto(categorySaved);
+        if (categoryRequestDto.categoryType() == null || categoryRequestDto.categoryType().isBlank()) {
+            throw new BadRequestException("Category type is required");
+        }
+
+        try {
+            CategoryType type = CategoryType.valueOf(categoryRequestDto.categoryType().toUpperCase());
+
+            // Verificar si ya existe una categoría con este tipo
+            if (categoryRepository.existsByCategoryType(type)) {
+                throw new BadRequestException("Category with type '" + type + "' already exists");
+            }
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid category type: '" + categoryRequestDto.categoryType() + "'. Valid types are: SIMPLE, DOUBLE, SUITE", e);
+        }
+
+        Category category = CategoryMappers.categoryRequestDtoToCategory(categoryRequestDto);
+        Category savedCategory = categoryRepository.save(category);
+
+        return CategoryMappers.categoryToCategoryResponseDto(savedCategory);
     }
 
     @Override
     public List<CategoryResponseDto> getAllCategories() {
-        List<Category> categoryList = categoryRepository.findAll();
-        List<CategoryResponseDto> categoryResponseDto = categoryList.stream()
-                .map(categoryMappers::categoryToCategoryResponseDto)
+        return categoryRepository.findAll().stream()
+                .map(CategoryMappers::categoryToCategoryResponseDto)
                 .toList();
-        return categoryResponseDto;
     }
 
     @Override
     public Category findCategoryById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
-        return category;
+        if (id == null || id <= 0) {
+            throw new BadRequestException("Category ID must be a valid positive number");
+        }
+
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category with ID " + id + " not found"));
     }
 
     @Override
     public Optional<CategoryResponseDto> findCategoryByType(String categoryType) {
-        if (categoryType == null || categoryType.isBlank()) return Optional.empty();
-        CategoryType type;
-        try{
-            type = CategoryType.valueOf(categoryType.toUpperCase());
-        } catch (IllegalArgumentException e){
-            return Optional.empty();
+        if (categoryType == null || categoryType.isBlank()) {
+            throw new BadRequestException("Category type cannot be null or empty");
         }
-        return categoryRepository.findByCategoryType(type)
-                .map(categoryMappers::categoryToCategoryResponseDto);
+
+        try {
+            CategoryType type = CategoryType.valueOf(categoryType.toUpperCase());
+            return categoryRepository.findByCategoryType(type)
+                    .map(CategoryMappers::categoryToCategoryResponseDto);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid category type: '" + categoryType + "'. Valid types are: SIMPLE, DOUBLE, SUITE", e);
+        }
     }
 
     @Override
     public boolean existsByCategoryType(Category category) {
-        if (category == null || category.getCategoryType() == null) return false;
-        CategoryType type = category.getCategoryType();
-        return categoryRepository.existsByCategoryType(type);
+        if (category == null || category.getCategoryType() == null) {
+            throw new BadRequestException("Category and category type cannot be null");
+        }
+        return categoryRepository.existsByCategoryType(category.getCategoryType());
     }
 }

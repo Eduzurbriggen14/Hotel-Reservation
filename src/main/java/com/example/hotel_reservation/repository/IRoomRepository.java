@@ -17,4 +17,5 @@ public interface IRoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByRoomNumber(String roomNumber);
 
 
+
 }

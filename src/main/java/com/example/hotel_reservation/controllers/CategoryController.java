@@ -4,7 +4,7 @@ package com.example.hotel_reservation.controllers;
 import com.example.hotel_reservation.dto.category.CategoryRequestDto;
 import com.example.hotel_reservation.dto.category.CategoryResponseDto;
 import com.example.hotel_reservation.entity.Category;
-import com.example.hotel_reservation.mapper.category.CategoryMappers;
+import com.example.hotel_reservation.mapper.CategoryMappers;
 import com.example.hotel_reservation.service.ICategoryService;
 
 import jakarta.validation.Valid;
@@ -79,5 +79,7 @@ public class CategoryController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    // Falta delete
 
 }

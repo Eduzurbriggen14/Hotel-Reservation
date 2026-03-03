@@ -38,6 +38,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRol userRol;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(30) default 'ACTIVE'")
+    private UserStatus userStatus;
+
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RoomService> roomServices = new ArrayList<>();
 
@@ -53,4 +57,10 @@ public class User {
         this.userRol = userRol;
     }
 
+    public void addReservation(Reservation reservation) {
+        if (reservation != null) {
+            this.reservations.add(reservation);
+            reservation.setUser(this);
+        }
+    }
 }

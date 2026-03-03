@@ -5,9 +5,8 @@ import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
-public record CategoryRequestDto(@NotBlank String categoryName,
-                                 @NotBlank String description,
+public record CategoryRequestDto(@NotBlank String description,
                                  @NotBlank String categoryType,
-                                 @NotBlank @Positive int maxOccupancy,
-                                 @NotBlank @Positive BigDecimal pricePerNight) {
+                                 @Positive int maxOccupancy,
+                                 @Positive BigDecimal pricePerNight) {
 }

@@ -4,36 +4,39 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
-    private String categoryName;
     private String description;
+
     private BigDecimal pricePerNight;
-    private int maxOccupancy;
+
+    private Integer maxOccupancy;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Room> rooms;
+    private List<Room> rooms = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private CategoryType categoryType;
 
-    public Category(String categoryName, String description, String categoryType, int maxOccupancy, BigDecimal pricePerNight) {
-        this.categoryName = categoryName;
-        this.description = description;
-        this.categoryType = CategoryType.valueOf(categoryType.toUpperCase());
-        this.maxOccupancy = maxOccupancy;
-        this.pricePerNight = pricePerNight;
+    public void addRoomToListRoom(Room room){
+        if (room != null) {
+            rooms.add(room);
+            room.setCategory(this);
+        }
     }
 }

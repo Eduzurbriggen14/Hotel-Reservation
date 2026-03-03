@@ -3,10 +3,7 @@ package com.example.hotel_reservation.controllers;
 import com.example.hotel_reservation.dto.user.UserRequestDto;
 import com.example.hotel_reservation.dto.user.UserResponseDto;
 import com.example.hotel_reservation.dto.user.UserUpdateRequestDto;
-import com.example.hotel_reservation.entity.User;
-import com.example.hotel_reservation.mapper.user.UserMappers;
 import com.example.hotel_reservation.service.IUserService;
-import jakarta.servlet.Servlet;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +11,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController

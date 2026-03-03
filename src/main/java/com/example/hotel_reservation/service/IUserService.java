@@ -19,5 +19,7 @@ public interface IUserService {
     public List<UserResponseDto> getUsersByRol(String userRol);
 
     public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto);
+
+    public void deleteUser(Long userId);
 }
 

@@ -1,7 +1,8 @@
-package com.example.hotel_reservation.mapper.user;
+package com.example.hotel_reservation.mapper;
 
 import com.example.hotel_reservation.dto.user.UserRequestDto;
 import com.example.hotel_reservation.dto.user.UserResponseDto;
+import com.example.hotel_reservation.dto.user.UserReservationDto;
 import com.example.hotel_reservation.entity.User;
 import com.example.hotel_reservation.entity.UserRol;
 import org.springframework.stereotype.Component;
@@ -40,4 +41,25 @@ public class UserMappers {
                 role);
     }
 
+    public static UserReservationDto userToUserReservationDto(User user) {
+        if (user == null) return null;
+        return new UserReservationDto(
+                user.getUserId(),
+                user.getUserEmail(),
+                user.getName(),
+                user.getLastName()
+        );
+    }
+
+    public static UserReservationDto userResponseDtoToUserReservationDto(UserResponseDto userResponseDto) {
+        if (userResponseDto == null) return null;
+        return new UserReservationDto(
+                userResponseDto.userId(),
+                userResponseDto.userEmail(),
+                userResponseDto.name(),
+                userResponseDto.lastName()
+        );
+    }
+
 }
+
