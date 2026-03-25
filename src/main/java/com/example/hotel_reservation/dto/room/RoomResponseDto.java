@@ -5,6 +5,6 @@ import com.example.hotel_reservation.entity.RoomState;
 
 public record RoomResponseDto(Long roomId,
                               String roomNumber,
-                              RoomState roomState,
+                              RoomState roomStatus,
                               CategoryResponseDto category) {
 }

@@ -93,7 +93,7 @@ public class RoomServiceImp implements IRoomService {
 
         try{
             RoomState state = RoomState.valueOf(roomState.toUpperCase(Locale.ROOT));
-            List<Room> roomsStateList = roomRepository.findByRoomState(state);
+            List<Room> roomsStateList = roomRepository.findByRoomStatus(state);
             return roomsStateList.stream()
                     .map(RoomMappers::roomToRoomResponseDto)
                     .collect(Collectors.toList());
@@ -124,7 +124,7 @@ public class RoomServiceImp implements IRoomService {
         if (updateRoomRequestDto.roomStatus() != null && !updateRoomRequestDto.roomStatus().isBlank()){
             try {
                 RoomState rs = RoomState.valueOf(updateRoomRequestDto.roomStatus().toUpperCase(Locale.ROOT));
-                room.setRoomState(rs);
+                room.setRoomStatus(rs);
             } catch (IllegalArgumentException ex){
                 throw new BadRequestException("Invalid room status: '" + updateRoomRequestDto.roomStatus() + "'", ex);
             }

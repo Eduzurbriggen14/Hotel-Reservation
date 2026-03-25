@@ -58,7 +58,7 @@ public class Reservation {
             BigDecimal total;
             BigDecimal extraPrice;
             switch (room.getCategory().getCategoryType().name()){
-                case "SINGLE":
+                case "SIMPLE":
                     extraPrice = BigDecimal.valueOf((numberOfGuests - room.getCategory().getMaxOccupancy()) * 500 * days);
                     total = room.getCategory().getPricePerNight().multiply(BigDecimal.valueOf(days)).add(extraPrice);
                     return total;

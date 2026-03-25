@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.AccessLevel;
 
 
 import java.util.ArrayList;
@@ -27,7 +26,8 @@ public class Room {
     private String roomNumber;
 
     @Enumerated(EnumType.STRING)
-    private RoomState roomState;
+    @Column(name = "room_status")
+    private RoomState roomStatus;
 
     @ManyToOne
     @JoinColumn(name = "categoryId")

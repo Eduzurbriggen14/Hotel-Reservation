@@ -29,7 +29,7 @@ public class RoomMappers {
 
         Room room = new Room();
         room.setRoomNumber(dto.roomNumber());
-        room.setRoomState(state);
+        room.setRoomStatus(state);
         room.setCategory(category);
         return room;
     }
@@ -47,7 +47,7 @@ public class RoomMappers {
         return new RoomResponseDto(
                 room.getRoomId(),
                 room.getRoomNumber(),
-                room.getRoomState(),
+                room.getRoomStatus(),
                 categoryDto
         );
     }
@@ -58,7 +58,7 @@ public class RoomMappers {
         Room room = new Room();
         room.setRoomId(dto.roomId());
         room.setRoomNumber(dto.roomNumber());
-        room.setRoomState(dto.roomState());
+        room.setRoomStatus(dto.roomStatus());
 
         CategoryResponseDto categoryDto = dto.category();
         if (categoryDto != null) {

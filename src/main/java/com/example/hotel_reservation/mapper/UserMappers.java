@@ -10,6 +10,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMappers {
 
+    public static User UserResponseDtoToUser(UserResponseDto employee) {
+        if (employee == null) return null;
+
+        User user = new User();
+        user.setUserId(employee.userId());
+        user.setUserEmail(employee.userEmail());
+        user.setName(employee.name());
+        user.setLastName(employee.lastName());
+
+        if (employee.userRol() != null) {
+            try {
+                user.setUserRol(UserRol.valueOf(employee.userRol().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                user.setUserRol(UserRol.CLIENT);
+            }
+        } else {
+            user.setUserRol(UserRol.CLIENT);
+        }
+
+        return user;
+    }
+
     public UserRol stringToUserRol(String userRol){
         if (userRol == null) return UserRol.CLIENT;
 

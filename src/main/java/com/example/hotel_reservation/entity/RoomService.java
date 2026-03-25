@@ -19,8 +19,6 @@ public class RoomService {
     private Long serviceId;
 
     private LocalDate serviceDate;
-    private LocalDateTime serviceStart;
-    private LocalDateTime serviceEnd;
     private String notes;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +34,13 @@ public class RoomService {
     @JoinColumn(name = "roomId")
     private Room room;
 
-    public boolean checkServiceEnd(){
-        return serviceEnd.isAfter(serviceStart);
+    public RoomService(LocalDate serviceDate, String notes, ServiceType serviceType, ServiceStatus serviceStatus, User employee, Room room) {
+        this.serviceDate = serviceDate;
+        this.notes = notes;
+        this.serviceType = serviceType;
+        this.serviceStatus = serviceStatus;
+        this.employee = employee;
+        this.room = room;
     }
+
 }

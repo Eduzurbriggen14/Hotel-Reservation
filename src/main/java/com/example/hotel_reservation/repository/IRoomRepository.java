@@ -10,12 +10,10 @@ import java.util.Optional;
 
 public interface IRoomRepository extends JpaRepository<Room, Long> {
 
-    List<Room> findByRoomState(RoomState roomState);
+    List<Room> findByRoomStatus(RoomState roomStatus);
 
     List<Room> findByCategoryCategoryType(CategoryType categoryType);
 
     Optional<Room> findByRoomNumber(String roomNumber);
-
-
-
 }
+
